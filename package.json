@@ -1,0 +1,9 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix client & npm run start --prefix server",
+    "start": "npm run start --prefix server"
+  },
+  "description": ""
+}
