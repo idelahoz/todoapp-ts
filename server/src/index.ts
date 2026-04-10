@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import cors from 'cors';
-import { createTodo } from './handlers/todos';
+import { createTodo, getAllTodos, getTodoById } from './handlers/todos';
+import { todoModel } from './models/todos';
 
 const apiRouter = Router();
 
@@ -14,7 +15,9 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
-apiRouter.post('/todos', createTodo);
+apiRouter.post('/todos', createTodo(todoModel));
+apiRouter.get('/todos', getAllTodos(todoModel));
+apiRouter.get('/todos/:id', getTodoById(todoModel));
 
 app.use('/api', apiRouter);
 

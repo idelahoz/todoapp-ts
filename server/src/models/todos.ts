@@ -4,7 +4,7 @@ export interface Todo {
   completed: boolean;
 }
 
-class TodoModel {
+export class TodoModel {
   private todos: Todo[] = [];
 
   add(title: string): Todo {
