@@ -1,82 +1,29 @@
-import { useState, useEffect } from 'react';
-import { fetchTodos, createTodo, updateTodo, deleteTodo } from './api/todos';
-import './App.css';
+import { useEffect } from 'react'
+import { useTodos } from './store/todosStore'
+import './App.css'
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [search, setSearch] = useState('');
-  const [newTitle, setNewTitle] = useState('');
-  const [editingId, setEditingId] = useState(null);
-  const [editTitle, setEditTitle] = useState('');
-  const [loading, setLoading] = useState(false);
+  const todos = useTodos((state) => state.todos)
+  const search = useTodos((state) => state.search)
+  const newTitle = useTodos((state) => state.newTitle)
+  const editingId = useTodos((state) => state.editingId)
+  const editTitle = useTodos((state) => state.editTitle)
+  const loading = useTodos((state) => state.loading)
 
-  async function loadTodos() {
-    setLoading(true);
-    try {
-      const data = await fetchTodos(search);
-      setTodos(data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const setSearch = useTodos((state) => state.setSearch)
+  const setNewTitle = useTodos((state) => state.setNewTitle)
+  const setEditTitle = useTodos((state) => state.setEditTitle)
+  const loadTodos = useTodos((state) => state.loadTodos)
+  const handleAdd = useTodos((state) => state.handleAdd)
+  const handleToggle = useTodos((state) => state.handleToggle)
+  const handleDelete = useTodos((state) => state.handleDelete)
+  const startEdit = useTodos((state) => state.startEdit)
+  const saveEdit = useTodos((state) => state.saveEdit)
+  const cancelEdit = useTodos((state) => state.cancelEdit)
 
   useEffect(() => {
-    loadTodos();
-  }, [search]);
-
-  async function handleAdd(e) {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
-    try {
-      await createTodo(newTitle);
-      setNewTitle('');
-      loadTodos();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function handleToggle(todo) {
-    try {
-      await updateTodo(todo.id, { completed: !todo.completed });
-      loadTodos();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function handleDelete(id) {
-    try {
-      await deleteTodo(id);
-      loadTodos();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  function startEdit(todo) {
-    setEditingId(todo.id);
-    setEditTitle(todo.title);
-  }
-
-  async function saveEdit(todo) {
-    if (!editTitle.trim()) return;
-    try {
-      await updateTodo(todo.id, { title: editTitle });
-      setEditingId(null);
-      setEditTitle('');
-      loadTodos();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  function cancelEdit() {
-    setEditingId(null);
-    setEditTitle('');
-  }
+    loadTodos()
+  }, [search])
 
   return (
     <div>
@@ -136,7 +83,7 @@ function App() {
         </ul>
       )}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
