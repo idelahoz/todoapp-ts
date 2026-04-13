@@ -1,5 +1,14 @@
 import { useEffect } from 'react'
 import { useTodos } from './store/todosStore'
+import Heading from './components/atoms/Heading/Heading'
+import Form from './components/atoms/Form/Form'
+import Input from './components/atoms/Input/Input'
+import Button from './components/atoms/Button/Button'
+import List from './components/atoms/List/List'
+import ListItem from './components/atoms/ListItem/ListItem'
+import Checkbox from './components/atoms/Checkbox/Checkbox'
+import Text from './components/atoms/Text/Text'
+import Paragraph from './components/atoms/Paragraph/Paragraph'
 import './App.css'
 
 function App() {
@@ -27,19 +36,19 @@ function App() {
 
   return (
     <div>
-      <h1>Todos</h1>
+      <Heading>Todos</Heading>
 
-      <form onSubmit={handleAdd}>
-        <input
+      <Form onSubmit={handleAdd}>
+        <Input
           type="text"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
           placeholder="New todo"
         />
-        <button type="submit">Add</button>
-      </form>
+        <Button type="submit">Add</Button>
+      </Form>
 
-      <input
+      <Input
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -47,40 +56,39 @@ function App() {
       />
 
       {loading ? (
-        <p>Loading...</p>
+        <Paragraph>Loading...</Paragraph>
       ) : todos.length === 0 ? (
-        <p>No todos</p>
+        <Paragraph>No todos</Paragraph>
       ) : (
-        <ul>
+        <List>
           {todos.map((todo) => (
-            <li key={todo.id}>
+            <ListItem key={todo.id}>
               {editingId === todo.id ? (
                 <>
-                  <input
+                  <Input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
                   />
-                  <button onClick={() => saveEdit(todo)}>Save</button>
-                  <button onClick={cancelEdit}>Cancel</button>
+                  <Button onClick={() => saveEdit(todo)}>Save</Button>
+                  <Button onClick={cancelEdit}>Cancel</Button>
                 </>
               ) : (
                 <>
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     checked={todo.completed}
                     onChange={() => handleToggle(todo)}
                   />
-                  <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                  <Text style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
                     {todo.title}
-                  </span>
-                  <button onClick={() => startEdit(todo)}>Edit</button>
-                  <button onClick={() => handleDelete(todo.id)}>Delete</button>
+                  </Text>
+                  <Button onClick={() => startEdit(todo)}>Edit</Button>
+                  <Button onClick={() => handleDelete(todo.id)}>Delete</Button>
                 </>
               )}
-            </li>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       )}
     </div>
   )
