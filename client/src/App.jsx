@@ -1,14 +1,5 @@
 import { useEffect } from 'react'
 import { useTodos } from './store/todosStore'
-import Heading from './components/atoms/Heading/Heading'
-import Form from './components/atoms/Form/Form'
-import Input from './components/atoms/Input/Input'
-import Button from './components/atoms/Button/Button'
-import List from './components/atoms/List/List'
-import ListItem from './components/atoms/ListItem/ListItem'
-import Checkbox from './components/atoms/Checkbox/Checkbox'
-import Text from './components/atoms/Text/Text'
-import Paragraph from './components/atoms/Paragraph/Paragraph'
 import './App.css'
 
 function App() {
@@ -35,61 +26,79 @@ function App() {
   }, [search])
 
   return (
-    <div>
-      <Heading>Todos</Heading>
+    <div className="app">
+      <header className="app-header">
+        <h1 className="app-title">Todos</h1>
+        <p className="app-subtitle">Stay organized, get things done</p>
+      </header>
 
-      <Form onSubmit={handleAdd}>
-        <Input
+      <section className="search-section">
+        <input
+          className="search-input"
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search your todos..."
+        />
+      </section>
+
+      <form className="add-section add-form" onSubmit={handleAdd}>
+        <input
+          className="add-input"
           type="text"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
-          placeholder="New todo"
+          placeholder="What needs to be done?"
         />
-        <Button type="submit">Add</Button>
-      </Form>
+        <button className="add-button" type="submit">Add</button>
+      </form>
 
-      <Input
-        type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search todos"
-      />
-
-      {loading ? (
-        <Paragraph>Loading...</Paragraph>
-      ) : todos.length === 0 ? (
-        <Paragraph>No todos</Paragraph>
-      ) : (
-        <List>
-          {todos.map((todo) => (
-            <ListItem key={todo.id}>
-              {editingId === todo.id ? (
-                <>
-                  <Input
-                    type="text"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                  />
-                  <Button onClick={() => saveEdit(todo)}>Save</Button>
-                  <Button onClick={cancelEdit}>Cancel</Button>
-                </>
-              ) : (
-                <>
-                  <Checkbox
-                    checked={todo.completed}
-                    onChange={() => handleToggle(todo)}
-                  />
-                  <Text style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                    {todo.title}
-                  </Text>
-                  <Button onClick={() => startEdit(todo)}>Edit</Button>
-                  <Button onClick={() => handleDelete(todo.id)}>Delete</Button>
-                </>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      )}
+      <section className="todos-section">
+        {loading ? (
+          <div className="loading-state">Loading...</div>
+        ) : todos.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">○</div>
+            <p className="empty-text">No todos yet</p>
+            <p className="empty-subtext">Add your first todo above</p>
+          </div>
+        ) : (
+          <ul className="todos-list">
+            {todos.map((todo) => (
+              <li className="todo-item" key={todo.id}>
+                {editingId === todo.id ? (
+                  <div className="todo-edit-form">
+                    <input
+                      className="todo-edit-input"
+                      type="text"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                    />
+                    <button className="todo-save-btn" onClick={() => saveEdit(todo)}>Save</button>
+                    <button className="todo-cancel-btn" onClick={cancelEdit}>Cancel</button>
+                  </div>
+                ) : (
+                  <>
+                    <input
+                      className="todo-checkbox"
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={() => handleToggle(todo)}
+                    />
+                    <span className={`todo-text ${todo.completed ? 'completed' : ''}`}>
+                      {todo.title}
+                    </span>
+                    <div className="todo-actions">
+                      <button className="todo-edit-btn" onClick={() => startEdit(todo)}>Edit</button>
+                      <button className="todo-delete-btn" onClick={() => handleDelete(todo.id)}>Delete</button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   )
 }
